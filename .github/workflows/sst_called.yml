@@ -55,6 +55,13 @@ jobs:
 
           echo "assume_role=${ASSUME_ROLE}" >> "$GITHUB_OUTPUT"
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACC_KEY }}
+          aws-secret-access-key: ${{ secrets.SECRET_KEY }}
+          aws-region: us-west-2
+
       - name: Configure AWS Creds
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
