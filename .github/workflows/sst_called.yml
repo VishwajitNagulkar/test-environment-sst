@@ -27,7 +27,13 @@ jobs:
   sst-deploy:
     name: Run sst-deploy
     
-    runs-on: [self-hosted, Linux, X64]
+    # runs-on: [self-hosted, Linux, X64]
+    runs-on: 
+      labels: 
+      - self-hosted
+      - Linux
+      - X64
+      - flo-${{ inputs.app-env }}
 
       # - 'flo-${{ inputs.app-env}}'
     env: ${{ fromJSON(inputs.env-vars) }}
