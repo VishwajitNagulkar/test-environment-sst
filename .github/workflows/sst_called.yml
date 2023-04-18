@@ -1,0 +1,80 @@
+name: Shared Workflow - sst-deploy
+
+on:
+  workflow_call:
+    inputs:
+      app-env:
+        description: 'Application environment'
+        required: false
+        type: string
+        default: 'stag'
+      env-vars:
+        description: 'JSON object containing environment variables'
+        required: false
+        type: string
+        default: '{}'
+      preview:
+        description: 'Create or Destroy preview env'
+        required: false
+        type: string
+        default: ''
+    outputs:
+      assume_role:
+        description: 'Assume role value'
+        value: ${{ jobs.sst-deploy.outputs.assume_role }}
+
+jobs:
+  sst-deploy:
+    name: Run sst-deploy
+    runs-on:
+      - self-hosted
+      - 'flo-${{ inputs.app-env}}'
+    env: ${{ fromJSON(inputs.env-vars) }}
+    outputs:
+      assume_role: ${{ steps.set-vars.outputs.assume_role }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set additional environment variables
+        id: set-vars
+        run: |
+          if [[ "${{ inputs.app-env }}" == "prod" ]]; then
+            ACCOUNT=${{ vars.AWS_ACCOUNT_ID_FLOPROD }}
+          else
+            ACCOUNT=${{ vars.AWS_ACCOUNT_ID_FLOSTAG }}
+          fi
+          ASSUME_ROLE="arn:aws:iam::${ACCOUNT}:role/github-actions-deploy-role"
+
+          echo "assume_role=${ASSUME_ROLE}" >> "$GITHUB_OUTPUT"
+
+      - name: Configure AWS Creds
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-region: us-west-2
+          role-to-assume: '${{ steps.set-vars.outputs.assume_role }}'
+          role-duration-seconds: 900
+          role-skip-session-tagging: true
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build preview app
+        if: ${{ inputs.preview == 'create' }}
+        run: npx sst build --stage ${{ github.ref }}
+
+      - name: Deploy preview app
+        if: ${{ inputs.preview == 'create' }}
+        run: npx sst deploy --stage ${{ github.ref }}
+
+      - name: Remove preview app
+        if: ${{ inputs.preview == 'destroy' }}
+        run: npx sst remove --stage ${{ github.ref }}
+
+      - name: Build app
+        if: ${{ inputs.preview == '' }}
+        run: npx sst build --stage ${{ inputs.app-env }}
+
+      - name: Deploy app
+        if: ${{ inputs.preview == '' }}
+        run: npx sst deploy --stage ${{ inputs.app-env }} 
