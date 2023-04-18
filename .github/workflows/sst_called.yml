@@ -26,9 +26,10 @@ on:
 jobs:
   sst-deploy:
     name: Run sst-deploy
-    runs-on:
-      - self-hosted
-      - 'flo-${{ inputs.app-env}}'
+    
+    runs-on: [self-hosted, linux, ARM64]
+
+      # - 'flo-${{ inputs.app-env}}'
     env: ${{ fromJSON(inputs.env-vars) }}
     outputs:
       assume_role: ${{ steps.set-vars.outputs.assume_role }}

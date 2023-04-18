@@ -1,3 +1,0 @@
-[submodule "nestjs-app/floaws"]
-	path = nestjs-app/floaws
-	url = git@github.com:clouddrove-sandbox/test-environment-sst.git
