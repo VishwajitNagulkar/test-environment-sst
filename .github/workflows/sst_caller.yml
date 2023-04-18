@@ -35,7 +35,7 @@ jobs:
   call-workflow-B:
     uses: clouddrove-sandbox/test-environment-sst/.github/workflows/sst_called.yml@master
     with:
-      app-env: stag
+      app-env: prod
       preview: create    ##create or destroy
 
 env:
