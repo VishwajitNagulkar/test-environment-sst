@@ -52,7 +52,6 @@ jobs:
             ACCOUNT=${{ vars.AWS_ACCOUNT_ID_FLOSTAG }}
           fi
           ASSUME_ROLE="arn:aws:iam::${ACCOUNT}:role/github-actions-deploy-role"
-# arn:aws:iam::333345213556:role/github-actions-deploy-role
 
           echo "assume_role=${ASSUME_ROLE}" >> "$GITHUB_OUTPUT"
 
