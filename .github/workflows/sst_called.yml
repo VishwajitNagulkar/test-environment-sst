@@ -63,7 +63,8 @@ jobs:
       #     aws-region: us-west-2
 
       - name: Configure AWS Creds
-        uses: aws-actions/configure-aws-credentials@v1-node16
+        # uses: aws-actions/configure-aws-credentials@v1-node16 aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-region: us-west-2
           # role-to-assume: '${{ steps.set-vars.outputs.assume_role }}'
