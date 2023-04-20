@@ -33,7 +33,7 @@ on:
 
 jobs:
   call-workflow-B:
-    uses: clouddrove-sandbox/test-environment-sst/.github/workflows/sst_called.yml@master
+    uses: VishwajitNagulkar/test-environment-sst/.github/workflows/sst_called.yml@master
     with:
       app-env: prod
       preview: create    ##create or destroy
