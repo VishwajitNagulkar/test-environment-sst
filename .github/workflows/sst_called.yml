@@ -62,16 +62,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.SECRET_KEY }}
           aws-region: us-west-2
 
-      # - name: Configure AWS Creds
-      #   # uses: aws-actions/configure-aws-credentials@v1-node16 aws-actions/configure-aws-credentials@v2
-      #   uses: aws-actions/configure-aws-credentials@v2
-      #   with:
-      #     aws-region: us-west-2
-      #     # role-to-assume: '${{ steps.set-vars.outputs.assume_role }}'
-      #     role-to-assume: arn:aws:iam::333345213556:role/github-actions-deploy-role
-      #     role-duration-seconds: 900
-      #     role-skip-session-tagging: true
-
       - name: Install dependencies
         run: npm ci
 
